@@ -1,0 +1,19 @@
+name: ntoaster
+description: A Notification Toaster that toasts notifications.
+version: 0.0.1
+homepage:
+environment:
+  sdk: ">=2.17.6 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  pausable_timer: ^1.0.0+6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
