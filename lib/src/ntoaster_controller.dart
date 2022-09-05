@@ -1,16 +1,19 @@
+import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:ntoaster/src/configuration/notification_meta_data.dart';
-import 'package:ntoaster/src/ntoaster_base.dart';
 import 'package:ntoaster/src/configuration/ntoaster_configuration.dart';
+import 'package:ntoaster/src/ntoaster_base.dart';
 import 'package:pausable_timer/pausable_timer.dart';
 
 class NToasterController implements NToasterBase {
+  bool get isAttached => _listWasAttached;
+
   static NToasterController? _instance;
   final List<NotificationMetaData> _queue = <NotificationMetaData>[];
 
-  final List<PausableTimer> _timers = <PausableTimer>[];
+  final LinkedHashMap<int, PausableTimer> _timers = LinkedHashMap();
 
   NToasterConfiguration? _configuration;
 
@@ -60,11 +63,15 @@ class NToasterController implements NToasterBase {
                                 child: GestureDetector(
                                     behavior: HitTestBehavior.translucent,
                                     onLongPress: () {
-                                      final timer = _timers[index];
+                                      final timer = _timers.entries
+                                          .elementAt(index)
+                                          .value;
                                       timer.pause();
                                     },
                                     onLongPressUp: () {
-                                      final timer = _timers[index];
+                                      final timer = _timers.entries
+                                          .elementAt(index)
+                                          .value;
                                       timer.start();
                                     },
                                     child: Padding(
@@ -96,7 +103,7 @@ class NToasterController implements NToasterBase {
   void enqueue(NotificationMetaData data) {
     if (_listWasAttached) {
       final length = _queue.length;
-      _queue.add(data);
+      _queue[data.id] = data;
       _key.currentState?.insertItem(length);
       final timer = PausableTimer(data.showFor, () {
         try {
@@ -105,7 +112,7 @@ class NToasterController implements NToasterBase {
           log(e.toString());
         }
       });
-      _timers.add(timer);
+      _timers[data.id] = timer;
       timer.start();
     } else {
       throw FlutterError(
@@ -139,7 +146,7 @@ class NToasterController implements NToasterBase {
                 ),
               ));
       _queue.removeAt(indexOfItem);
-      _timers.removeAt(indexOfItem);
+      _timers.remove(data.id);
     }
   }
 
