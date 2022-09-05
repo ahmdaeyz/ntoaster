@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:ntoaster/ntoaster.dart';
 import 'package:ntoaster/src/ntoaster_base.dart';
 
+/// Should wrap a widget that is not subject to removal from the Widget tree.
 class NToasterCenter extends StatefulWidget {
   const NToasterCenter(
       {Key? key,
