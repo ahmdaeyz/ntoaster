@@ -103,7 +103,7 @@ class NToasterController implements NToasterBase {
   void enqueue(NotificationMetaData data) {
     if (_listWasAttached) {
       final length = _queue.length;
-      _queue[data.id] = data;
+      _queue.add(data);
       _key.currentState?.insertItem(length);
       final timer = PausableTimer(data.showFor, () {
         try {
@@ -155,6 +155,8 @@ class NToasterController implements NToasterBase {
   void detach() {
     _entry?.remove();
     _listWasAttached = false;
+    _queue.clear();
+    _timers.clear();
     _configuration = null;
   }
 }
