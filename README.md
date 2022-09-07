@@ -1,5 +1,6 @@
 # NToaster
 
+![Pub Version](https://img.shields.io/pub/v/ntoaster)
 
 https://user-images.githubusercontent.com/36048466/188284228-cb91fd1d-9237-4edc-8d49-c4bba6e7bb31.mp4
 
